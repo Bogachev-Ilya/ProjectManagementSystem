@@ -17,7 +17,7 @@ public class TablesTest {
             e.printStackTrace();
         }
         tables = new Tables();
-        tables.createTablesAndInit("jdbc:sqlite:test.db");
+        tables.createTablesAndInit("jdbc:sqlite:test.db", "ProjectManagment");
     }
 
 
@@ -46,7 +46,7 @@ public class TablesTest {
                     "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', '2 years', 0);");
             ResultSet resultSet = statement.executeQuery("SELECT DISTINCT Project FROM PM WHERE IS_TaskComplite = 0;");
             String name = resultSet.getString("Project");
-            tables.showProjectInWork("jdbc:sqlite:test.db");
+            tables.showProjectInWork("jdbc:sqlite:test.db", "PM");
             assertEquals( name, tables.getResultSet().getString("Project"));
 
         } catch (SQLException e) {

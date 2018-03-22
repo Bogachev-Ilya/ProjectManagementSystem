@@ -6,6 +6,9 @@ public class Main {
             e.printStackTrace();
         }
         Tables tables = new Tables();
-        tables.createTablesAndInit("jdbc:sqlite:psm.db");
+        String url ="jdbc:sqlite:psm.db";
+        String tableName = "ProjectManagment";
+        tables.createTablesAndInit(url, tableName);
+        tables.showProjectInWork(url, tableName );
     }
 }
