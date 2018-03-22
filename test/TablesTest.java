@@ -115,7 +115,7 @@ public class TablesTest {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
             Statement statement = connection.createStatement();
 
-            ResultSet resultSet = statement.executeQuery("SELECT Responsible, Phone_Email FROM IncompleteTasks WHERE (StartDate<(DATE ('now')+Task_Duration) AND IS_TaskComplite =0);");
+            ResultSet resultSet = statement.executeQuery("SELECT Responsible, Phone_Email FROM IncompleteTasks WHERE ((StartDate+Task_Duration)<DATE ('now') AND IS_TaskComplite =0);");
             String name = resultSet.getString("Responsible");
             tables.lateTasks("jdbc:sqlite:test.db", "IncompleteTasks");
             assertEquals(name, tables.getResultSet().getString("Responsible"));

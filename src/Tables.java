@@ -101,6 +101,17 @@ public class Tables {
         }
     }
 
-    public void lateTasks(String URL, String talbeName) {
+    public void lateTasks(String URL, String tableName) {
+        try (Connection connection = DriverManager.getConnection(URL)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT Responsible, Phone_Email FROM " + tableName + " WHERE ((StartDate+Task_Duration)<DATE ('now') AND IS_TaskComplite =0)");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getString("Responsible");
+                String contacts =resultSet.getString("Phone_Email");
+                System.out.printf("%s is late tasks, contact info: %s\n", name, contacts);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
