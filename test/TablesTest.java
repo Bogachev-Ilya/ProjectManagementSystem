@@ -67,22 +67,41 @@ public class TablesTest {
                     "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', 365, 0);");
             ResultSet resultSet = statement.executeQuery("SELECT COUNT (Task) FROM IncompleteTasks WHERE (IS_TaskComplite =0 AND Project='NotStandardJava');");
             int count = resultSet.getInt(1);
-            tables.countIncompleteProjectTasks("jdbc:sqlite:test.db", "IncompleteTasks" , "NotStandardJava");
+            tables.countIncompleteProjectTasks("jdbc:sqlite:test.db", "IncompleteTasks", "NotStandardJava");
             assertEquals(count, tables.getResultSet().getInt(1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     @Test
-    public void testIncompleteResponsibleTasks(){
+    public void testIncompleteResponsibleTasks() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-            Statement statement =connection.createStatement();
+            Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT Task FROM IncompleteTasks WHERE (Responsible='Bob' AND IS_TaskComplite =0);");
-            String tasks =resultSet.getString("Task");
+            String tasks = resultSet.getString("Task");
             tables.incompleteResponsibleTasks("jdbc:sqlite:test.db", "IncompleteTasks", "Bob");
             assertEquals(tasks, tables.getResultSet().getString("Task"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testCurrentTasks() {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("INSERT INTO IncompleteTasks (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
+                    "VALUES ('NotStandardJava', 'Create API', 'Ron', '456-789-22, ron@java.net', '2018-03-20', 180, 0);");
+            ResultSet resultSet = statement.executeQuery("SELECT Task, Responsible FROM IncompleteTasks WHERE (StartDate<DATE ('now') AND IS_TaskComplite =0);");
+            String tasks = resultSet.getString("Task");
+            tables.currentTasks("jdbc:sqlite:test.db", "IncompleteTasks");
+            assertEquals(tasks, tables.getResultSet().getString("Task"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

@@ -85,4 +85,7 @@ public class Tables {
             e.printStackTrace();
         }
     }
+
+    public void currentTasks(String URL, String tableName) {
+    }
 }
