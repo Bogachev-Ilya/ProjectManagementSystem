@@ -87,5 +87,17 @@ public class Tables {
     }
 
     public void currentTasks(String URL, String tableName) {
+        try (Connection connection = DriverManager.getConnection(URL)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT Task, Responsible FROM " + tableName + " WHERE (IS_TaskComplite = 0 AND StartDate<DATE ('now'));");
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String tasks = resultSet.getString("Task");
+                String responsible =resultSet.getString("Responsible");
+                System.out.printf("Today task is: %s; Responsible is: %s\n", tasks, responsible);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -9,10 +9,11 @@ public class Main {
         String url ="jdbc:sqlite:psm.db";
         String tableName = "ProjectManagment";
         String project = "Android App";
+        String responsible="Bob";
         tables.createTablesAndInit(url, tableName);
         tables.showProjectInWork(url, tableName );
         tables.countIncompleteProjectTasks(url, tableName, project);
-        String responsible="Bob";
         tables.incompleteResponsibleTasks(url, tableName, responsible);
+        tables.currentTasks(url, tableName);
     }
 }
