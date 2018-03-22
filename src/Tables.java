@@ -60,7 +60,7 @@ public class Tables {
         }
     }
 
-    public void incompleteTasks(String URL, String tableName, String projectName) {
+    public void countIncompleteProjectTasks(String URL, String tableName, String projectName) {
         try (Connection connection = DriverManager.getConnection(URL)) {
             PreparedStatement statement = connection.prepareStatement("SELECT COUNT (Task) FROM " + tableName + " WHERE IS_TaskComplite = 0 AND Project= ?;");
             statement.setString(1, projectName);
@@ -70,5 +70,8 @@ public class Tables {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void incompleteResponsibleTasks(String URL, String tableName, String responsibleName) {
     }
 }

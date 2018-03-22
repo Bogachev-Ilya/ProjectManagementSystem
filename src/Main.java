@@ -11,6 +11,6 @@ public class Main {
         String project = "Android App";
         tables.createTablesAndInit(url, tableName);
         tables.showProjectInWork(url, tableName );
-        tables.incompleteTasks(url, tableName, project);
+        tables.countIncompleteProjectTasks(url, tableName, project);
     }
 }

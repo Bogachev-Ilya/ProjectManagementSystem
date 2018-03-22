@@ -56,7 +56,7 @@ public class TablesTest {
     }
 
     @Test
-    public void testIncompleteTasks() {
+    public void testCountIncompleteProjectTasks() {
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS IncompleteTasks");
@@ -67,8 +67,20 @@ public class TablesTest {
                     "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', '1 year', 0);");
             ResultSet resultSet = statement.executeQuery("SELECT COUNT (Task) FROM IncompleteTasks WHERE (IS_TaskComplite =0 AND Project='NotStandardJava');");
             int count = resultSet.getInt(1);
-            tables.incompleteTasks("jdbc:sqlite:test.db", "IncompleteTasks" , "NotStandardJava");
+            tables.countIncompleteProjectTasks("jdbc:sqlite:test.db", "IncompleteTasks" , "NotStandardJava");
             assertEquals(count, tables.getResultSet().getInt(1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void testIncompleteResponsibleTasks(){
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
+            Statement statement =connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT Task FROM IncompleteTasks WHERE (Responsible='Bob' AND IS_TaskComplite =0);");
+            String tasks =resultSet.getString("Task");
+            tables.incompleteResponsibleTasks("jdbc:sqlite:test.db", "IncompleteTasks", "Bob");
+            assertEquals(tasks, tables.getResultSet().getString("Task"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
