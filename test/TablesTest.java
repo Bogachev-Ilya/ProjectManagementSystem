@@ -41,10 +41,10 @@ public class TablesTest {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS PM");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS PM" +
-                    "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration TEXT, IS_TaskComplite INTEGER);");
+                    "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration INTEGER, IS_TaskComplite INTEGER);");
 
             statement.executeUpdate("INSERT INTO PM (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
-                    "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', '2 years', 0);");
+                    "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', 720, 0);");
             ResultSet resultSet = statement.executeQuery("SELECT DISTINCT Project FROM PM WHERE IS_TaskComplite = 0;");
             String name = resultSet.getString("Project");
             tables.showProjectInWork("jdbc:sqlite:test.db", "PM");
@@ -61,10 +61,10 @@ public class TablesTest {
             Statement statement = connection.createStatement();
             statement.executeUpdate("DROP TABLE IF EXISTS IncompleteTasks");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS IncompleteTasks" +
-                    "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration TEXT, IS_TaskComplite INTEGER);");
+                    "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration INTEGER, IS_TaskComplite INTEGER);");
 
             statement.executeUpdate("INSERT INTO IncompleteTasks (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
-                    "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', '1 year', 0);");
+                    "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', 365, 0);");
             ResultSet resultSet = statement.executeQuery("SELECT COUNT (Task) FROM IncompleteTasks WHERE (IS_TaskComplite =0 AND Project='NotStandardJava');");
             int count = resultSet.getInt(1);
             tables.countIncompleteProjectTasks("jdbc:sqlite:test.db", "IncompleteTasks" , "NotStandardJava");
