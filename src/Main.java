@@ -12,5 +12,7 @@ public class Main {
         tables.createTablesAndInit(url, tableName);
         tables.showProjectInWork(url, tableName );
         tables.countIncompleteProjectTasks(url, tableName, project);
+        String responsible="Bob";
+        tables.incompleteResponsibleTasks(url, tableName, responsible);
     }
 }

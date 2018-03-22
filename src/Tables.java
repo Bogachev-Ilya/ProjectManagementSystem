@@ -73,5 +73,16 @@ public class Tables {
     }
 
     public void incompleteResponsibleTasks(String URL, String tableName, String responsibleName) {
+        try (Connection connection = DriverManager.getConnection(URL)) {
+            PreparedStatement statement = connection.prepareStatement("SELECT Task FROM " + tableName + " WHERE (IS_TaskComplite = 0 AND Responsible= ?);");
+            statement.setString(1, responsibleName);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String tasks = resultSet.getString("Task");
+                System.out.printf("Incomplete tasks for %s is: %s\n", responsibleName, tasks);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
