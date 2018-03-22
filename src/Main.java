@@ -8,7 +8,9 @@ public class Main {
         Tables tables = new Tables();
         String url ="jdbc:sqlite:psm.db";
         String tableName = "ProjectManagment";
+        String project = "Android App";
         tables.createTablesAndInit(url, tableName);
         tables.showProjectInWork(url, tableName );
+        tables.incompleteTasks(url, tableName, project);
     }
 }
