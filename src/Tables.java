@@ -61,4 +61,7 @@ public class Tables {
     public ResultSet getResultSet() {
         return resultSet;
     }
+
+    public void incompleteTasks(String URL, String tableName, String projectName) {
+    }
 }
