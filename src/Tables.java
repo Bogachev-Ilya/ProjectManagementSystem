@@ -2,6 +2,8 @@ import java.sql.*;
 
 public class Tables {
 
+    private ResultSet resultSet;
+
     public void createTablesAndInit(String URL){
 
         try (Connection connection = DriverManager.getConnection(URL)){
@@ -41,4 +43,12 @@ public class Tables {
     }
 
 
+    public void showProjectInWork(String URL) {
+
+
+    }
+
+    public ResultSet getResultSet() {
+        return resultSet;
+    }
 }
