@@ -30,12 +30,14 @@ public class TablesTest {
                 "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration INTEGER, IS_TaskComplite INTEGER);");
 
         statement.executeUpdate("INSERT INTO PM (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
-                "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01', 720, 0);");
+                "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2017-01-01 00:00:00', 320, 0);");
         statement.executeUpdate("DROP TABLE IF EXISTS IncompleteTasks");
         statement.executeUpdate("CREATE TABLE IF NOT EXISTS IncompleteTasks" +
                 "(Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, Project TEXT, Task TEXT, Responsible TEXT, Phone_Email TEXT, StartDate TEXT, Task_Duration INTEGER, IS_TaskComplite INTEGER);");
         statement.executeUpdate("INSERT INTO IncompleteTasks (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
-                "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2018-03-20', 180, 0);");
+                "VALUES ('NotStandardJava', 'Create new Lib', 'Bob', '456-789-00, bob@java.net', '2018-03-20 00:00:00', 180, 0);");
+        statement.executeUpdate("INSERT INTO IncompleteTasks (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
+                "VALUES ('NotStandardJava', 'Test new Lib', 'Lily', '456-789-00, lily@java.net', '2018-07-20 00:00:00', 180, 0);");
 
 
     }
@@ -111,7 +113,8 @@ public class TablesTest {
     @Test
     public void testLateTasks(){
         try  {
-            ResultSet resultSet = statement.executeQuery("SELECT Responsible, Phone_Email FROM IncompleteTasks WHERE ((StartDate+Task_Duration)<DATE ('now') AND IS_TaskComplite =0);");
+          // ResultSet resultSet = statement.executeQuery("SELECT Responsible, Phone_Email FROM IncompleteTasks WHERE ((StartDate+Task_Duration)<DATE ('now') AND IS_TaskComplite =0);");
+            ResultSet resultSet = statement.executeQuery("SELECT Responsible, Phone_Email FROM IncompleteTasks WHERE (((strftime('%s', StartDate)) + (Task_Duration*86400)) < (strftime('%s', 'now')));");
             String name = resultSet.getString("Responsible");
             tables.lateTasks("jdbc:sqlite:test.db", "IncompleteTasks");
             assertEquals(name, tables.getResultSet().getString("Responsible"));

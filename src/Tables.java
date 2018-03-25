@@ -32,6 +32,8 @@ public class Tables {
                     "VALUES ('Android App', 'App logic', 'Troy', '456-000-01, troy@java.net', '2017-02-10', 365, 0);");
             statement.executeUpdate("INSERT INTO " + tableName + " (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
                     "VALUES ('Android App', 'Transaction', 'Jak', '456-789-12, jak@java.net', '2017-05-20', 150, 1);");
+            statement.executeUpdate("INSERT INTO " + tableName + " (Project, Task, Responsible, Phone_Email, StartDate, Task_Duration, IS_TaskComplite)" +
+                    "VALUES ('Android App', 'Create Tests', 'Lily', '456-789-34, lily@java.net', '2019-09-20', 150, 0);");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,10 +49,10 @@ public class Tables {
                 String name = resultSet.getString("Project");
                 System.out.printf("Projects in work: %s\n", name);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void countIncompleteProjectTasks(String URL, String tableName, String projectName) {
@@ -96,7 +98,7 @@ public class Tables {
 
     public void lateTasks(String URL, String tableName) {
         try (Connection connection = DriverManager.getConnection(URL)) {
-            PreparedStatement statement = connection.prepareStatement("SELECT Responsible, Phone_Email FROM " + tableName + " WHERE ((StartDate+Task_Duration)<DATE ('now') AND IS_TaskComplite =0)");
+            PreparedStatement statement = connection.prepareStatement("SELECT Responsible, Phone_Email FROM " + tableName + " WHERE (((strftime('%s', StartDate)) + (Task_Duration*86400)) < (strftime('%s', 'now')))");
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String name = resultSet.getString("Responsible");
